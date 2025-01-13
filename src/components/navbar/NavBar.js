@@ -10,6 +10,8 @@ import AppTheme from '../shared-theme/AppTheme';
 import { Link } from 'react-router-dom';
 import SvgIcon from '@mui/material/SvgIcon';
 import LoginIcon from '@mui/icons-material/Login';
+import LockIcon from '@mui/icons-material/Lock';
+import DashboardIcon from '@mui/icons-material/Dashboard';
 
 function HomeIcon(props) {
   return (
@@ -58,16 +60,16 @@ const StyledToolbar = styled(Toolbar)(({ theme }) => ({
     padding: '8px 12px',
 }));
 
-export default function NavBar(props) {
+export default function NavBar({ isAuthenticated }) {
     return (
-        <AppTheme {...props}>
+        <AppTheme>
             <CssBaseline enableColorScheme />
             <NavBarContainer direction="column" justifyContent="space-between">
                 <StyledToolbar variant="dense" disableGutters>
                     <Box sx={{ flexGrow: 1, display: 'flex', alignItems: 'center', px: 0 }}>
                         <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
                             <Button variant="contained" color="primary" size="small">
-                                <HomeIcon fontSize="small"/>
+                                <HomeIcon fontSize="small" />
                             </Button>
                         </Box>
                     </Box>
@@ -78,17 +80,44 @@ export default function NavBar(props) {
                             alignItems: 'center',
                         }}
                     >
-                        <Link to="/signin" variant="text" color="inherit">
-                            <Button color="primary" variant="text" size="small">
-                                <LoginIcon fontSize="small"/>
-                            </Button>
-                        </Link>
-                        <Link to="/signup" variant="text" color="inherit">
-                            <Button color="primary" variant="contained" size="small">
-                                Registrarse
-                            </Button>
-                        </Link>
-                        <ColorModeIconDropdown />
+                        {isAuthenticated ? (
+                            // Navbar para usuarios autenticados
+                            <>
+                                <Link to="/dashboard" variant="text" color="inherit">
+                                    <Button color="primary" variant="text" size="small">
+                                        <DashboardIcon fontSize="small" />
+                                    </Button>
+                                </Link>
+                                <Button
+                                    color="primary"
+                                    variant="contained"
+                                    size="small"
+                                    onClick={() => {
+                                        localStorage.removeItem("token"); // Elimina el token
+                                        window.location.reload(); // Recarga la página
+                                        window.location.href = "/"; // Redirige a la página de inicio
+                                    }}
+                                >
+                                    <LockIcon fontSize="small" />
+                                </Button>
+                                <ColorModeIconDropdown />
+                            </>
+                        ) : (
+                            // Navbar para usuarios no autenticados
+                            <>
+                                <Link to="/signin" variant="text" color="inherit">
+                                    <Button color="primary" variant="text" size="small">
+                                        <LoginIcon fontSize="small" />
+                                    </Button>
+                                </Link>
+                                <Link to="/signup" variant="text" color="inherit">
+                                    <Button color="primary" variant="contained" size="small">
+                                        Registrarse
+                                    </Button>
+                                </Link>
+                                <ColorModeIconDropdown />
+                            </>
+                        )}
                     </Box>
                 </StyledToolbar>
             </NavBarContainer>
