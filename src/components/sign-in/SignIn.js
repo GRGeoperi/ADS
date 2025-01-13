@@ -13,6 +13,8 @@ import MuiCard from '@mui/material/Card';
 import { styled } from '@mui/material/styles';
 import AppTheme from '../shared-theme/AppTheme';
 import Alert from '@mui/material/Alert';
+import UserTable from '../../components/user-table/UserTable';
+import { useNavigate } from 'react-router-dom';
 
 const Card = styled(MuiCard)(({ theme }) => ({
     display: 'flex',
@@ -63,6 +65,7 @@ export default function SignIn(props) {
     const [passwordErrorMessage, setPasswordErrorMessage] = React.useState('');
     const [errorMessage, setErrorMessage] = React.useState("");
     const [showError, setShowError] = React.useState(false);
+    const navigate = useNavigate(); // Hook para la navegación
 
     const handleSubmit = async (event) => {
         event.preventDefault(); // Evita que la página se recargue
@@ -90,7 +93,7 @@ export default function SignIn(props) {
                 console.log("Inicio de sesión exitoso:", result);
                 // Manejar el token o redirigir al usuario según tu backend
                 localStorage.setItem("token", result.token); // Guarda el token en localStorage
-                window.location.href = "/dashboard"; // Redirige al panel de control
+                navigate('/user-table'); // Redirige a la tabla de usuarios
             } else {
                 const error = await response.json();
                 setErrorMessage(error.message || "Error al iniciar sesión.");

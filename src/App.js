@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route} from 'react-router-dom';
 import SignUp from './components/sign-up/SignUp';
 import SignIn from './components/sign-in/SignIn';
 import NavBar from './components/navbar/NavBar';
+import UserTable from './components/user-table/UserTable';
 
 function App() {
     const [isAuthenticated, setIsAuthenticated] = React.useState(false);
@@ -21,6 +22,7 @@ function App() {
           <Route path="/" element={<SignIn />} />
           <Route path="/signup" element={<SignUp />} />
           <Route path="/signin" element={<SignIn />} />
+          <Route path="/user-table" element={<UserTable />} />
         </Routes>
       </Router>
     );

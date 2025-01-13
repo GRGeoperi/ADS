@@ -21,6 +21,31 @@ const pool = new Pool({
     port: process.env.DB_PORT,
 });
 
+// Ruta para eliminar un usuario
+app.delete("/api/users/:id", async (req, res) => {
+    const { id } = req.params;
+
+    try {
+        await pool.query("DELETE FROM usuario WHERE id_usuario = $1", [id]);
+        res.json({ success: true, message: "Usuario eliminado correctamente" });
+    } catch (error) {
+        console.error("Error en el servidor:", error.message);
+        res.status(500).json({ success: false, message: "Error al eliminar el usuario" });
+    }
+});
+
+// Ruta para obtener todos los usuarios
+app.get("/api/users", async (req, res) => {
+    try {
+        const result = await pool.query("SELECT id_usuario, nombre, email, alias FROM usuario");
+        res.json(result.rows);
+    } catch (error) {
+        console.error("Error en el servidor:", error.message);
+        console.error("Detalles del error:", error);
+        res.status(500).json({ success: false, message: "Error al obtener los usuarios" });
+    }
+});
+
 // Ruta para login
 app.post("/api/login", async (req, res) => {
     const { email, password } = req.body;
