@@ -67,6 +67,7 @@ export default function SignUp(props) {
     const [aliasErrorMessage, setAliasErrorMessage] = React.useState('');
     const [errorMessage, setErrorMessage] = React.useState("");
     const [showError, setShowError] = React.useState(false);
+    const [showSuccess, setShowSuccess] = React.useState(false);
 
     const validateInputs = () => {
         const email = document.getElementById('email');
@@ -144,8 +145,11 @@ export default function SignUp(props) {
             });
             if (response.ok) {
                 const result = await response.json();
-                console.log("Solicitud de registro exitosa:", result);
-                window.location.href = "/signin"; // Redirige al panel de control
+                setShowSuccess(true);
+                setTimeout(() => {
+                    window.location.href = "/signin";
+                }, 5000); // Espera 5 segundo antes de redirigir
+
             } else {
                 const error = await response.json();
                 setErrorMessage(error.message || "Error al enviar formulario.");
@@ -177,6 +181,11 @@ export default function SignUp(props) {
                         {showError && (
                             <Alert severity="error" onClose={() => setShowError(false)}>
                                 {errorMessage}
+                            </Alert>
+                        )}
+                        {showSuccess && (
+                            <Alert severity="success">
+                                Registro exitoso. Redirigiendo a la página de inicio de sesión.
                             </Alert>
                         )}
                         <FormControl>
